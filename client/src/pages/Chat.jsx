@@ -39,12 +39,19 @@ useEffect(() => {
   };
 }, [selectedUser, socket]);
 
+useEffect(() => {
+  if (messagesEndRef.current) {
+    messagesEndRef.current.scrollIntoView({
+      behavior: "smooth",
+    });
+  }
+}, [messages]);
 
   return (
-    <div className="h-screen flex bg-gray-100 overflow-hidden">
+    <div className="h-screen flex bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 overflow-hidden">
       <Sidebar setSelectedUser={setSelectedUser} />
 
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col h-full max-w-6xl mx-auto w-full overflow-hidden">
         {selectedUser && (
           <ChatHeader
             selectedUser={selectedUser}
@@ -52,24 +59,31 @@ useEffect(() => {
           />
         )}
 
-        <div className="flex-1 p-4 overflow-y-auto">
-          {!selectedUser ? (
-            <div className="h-full flex flex-col items-center justify-center text-gray-400">
-              <FiMessageSquare size={60} />
-              <p className="mt-4">Select a chat to start messaging</p>
-            </div>
-          ) : (
-            <div className="space-y-2">
-              {messages.map((msg) => (
-                <MessageBubble
-                  key={msg._id}
-                  message={msg}
-                  own={msg.senderId?.toString() === user._id}
-                />
-              ))}
-              <div ref={messagesEndRef} />
-            </div>
-          )}
+        <div className="flex-1 overflow-y-auto custom-scrollbar bg-white/5 backdrop-blur border-x border-white/10">
+          <div className="p-4 md:p-6 min-h-full flex flex-col">
+            {!selectedUser ? (
+              <div className="h-full flex flex-col items-center justify-center text-slate-300 flex-1">
+                <div className="p-4 rounded-full bg-white/10 border border-white/10 shadow-lg">
+                  <FiMessageSquare size={60} className="text-indigo-300" />
+                </div>
+                <p className="mt-5 text-lg font-medium text-slate-200">
+                  Select a chat to start messaging
+                </p>
+                <p className="text-sm text-slate-400">Your conversations will appear here.</p>
+              </div>
+            ) : (
+              <div className="space-y-3 pb-2">
+                {messages.map((msg) => (
+                  <MessageBubble
+                    key={msg._id}
+                    message={msg}
+                    own={msg.senderId?.toString() === user._id}
+                  />
+                ))}
+                <div ref={messagesEndRef} />
+              </div>
+            )}
+          </div>
         </div>
 
         {selectedUser && (

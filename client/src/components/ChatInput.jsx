@@ -33,22 +33,24 @@ export default function ChatInput({ selectedUser, setMessages }) {
   };
 
   return (
-    <div className="p-3 border-t bg-white flex items-center gap-2">
+    <div className="sticky bottom-0 z-10 p-4 md:p-5 border-t border-white/10 glass flex items-center gap-3 backdrop-blur-xl shadow-lg">
       <input
         type="text"
         value={text}
         onChange={(e) => setText(e.target.value)}
         placeholder="Type a message..."
-        className="flex-1 border rounded-full px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        className="flex-1 rounded-2xl px-4 md:px-5 py-3 bg-white/10 border border-white/10 text-slate-100 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-transparent transition"
         onKeyDown={(e) => e.key === "Enter" && handleSend()}
+        aria-label="Message input"
       />
 
       <button
         onClick={handleSend}
-        className="bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-full flex items-center gap-1"
+        className="bg-indigo-600 hover:bg-indigo-700 active:scale-95 text-white px-4 md:px-5 py-3 rounded-2xl flex items-center gap-2 shadow-lg shadow-indigo-900/40 transition"
+        aria-label="Send message"
       >
-        <FiSend />
-        Send
+        <FiSend className="text-lg" />
+        <span className="hidden sm:inline font-semibold">Send</span>
       </button>
     </div>
   );

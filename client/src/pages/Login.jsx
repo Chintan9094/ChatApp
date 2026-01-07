@@ -23,12 +23,12 @@ export default function Login() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-linear-to-br from-indigo-100 via-blue-100 to-purple-100 px-4">
-      <div className="w-full max-w-md bg-white/80 backdrop-blur-xl rounded-3xl shadow-2xl p-8">
-        <h1 className="text-3xl font-bold text-center text-indigo-600">
+    <div className="min-h-screen flex items-center justify-center px-4 bg-linear-to-br from-slate-950 via-slate-900 to-slate-950">
+      <div className="w-full max-w-md glass rounded-3xl shadow-2xl p-8 border border-white/10">
+        <h1 className="text-3xl font-bold text-center text-gradient">
           ChatApp
         </h1>
-        <p className="text-center text-gray-500 mb-6">
+        <p className="text-center text-slate-300 mb-6">
           Login to continue chatting
         </p>
 
@@ -39,7 +39,7 @@ export default function Login() {
             onChange={handleChange}
             type="email"
             placeholder="Email"
-            className="w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-indigo-500 outline-none"
+            className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-slate-100 placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-500 outline-none"
           />
 
           <input
@@ -48,20 +48,20 @@ export default function Login() {
             onChange={handleChange}
             type="password"
             placeholder="Password"
-            className="w-full px-4 py-3 rounded-xl border focus:ring-2 focus:ring-indigo-500 outline-none"
+            className="w-full px-4 py-3 rounded-xl border border-white/10 bg-white/5 text-slate-100 placeholder:text-slate-400 focus:ring-2 focus:ring-indigo-500 outline-none"
           />
 
           <button
             disabled={loading}
-            className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition"
+            className="w-full py-3 rounded-xl bg-indigo-600 hover:bg-indigo-700 text-white font-semibold transition shadow-lg shadow-indigo-900/40"
           >
             {loading ? "Logging in..." : "Login"}
           </button>
         </form>
 
-        <p className="text-center text-sm text-gray-500 mt-6">
+        <p className="text-center text-sm text-slate-300 mt-6">
           Don’t have an account?{" "}
-          <Link to="/register" className="text-indigo-600 font-medium">
+          <Link to="/register" className="text-indigo-300 font-semibold hover:text-indigo-200">
             Register
           </Link>
         </p>

@@ -77,7 +77,7 @@ export default function Chat() {
 
   return (
     <div className="h-screen flex bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 overflow-hidden">
-      <Sidebar setSelectedUser={setSelectedUser} />
+      <Sidebar setSelectedUser={setSelectedUser} selectedUser={selectedUser} />
 
       <div className="flex-1 flex flex-col h-full max-w-6xl mx-auto w-full overflow-hidden">
         {selectedUser && (
@@ -106,18 +106,28 @@ export default function Chat() {
                 <p className="mt-4 text-lg">Select a chat to start messaging</p>
               </div>
             ) : (
-              <div className="space-y-3 pb-2">
-                {messages.map((msg) => (
-                  <MessageBubble
-                    key={msg._id}
-                    message={msg}
-                    own={msg.senderId?.toString() === user._id}
-                    onSelect={handleSelect}
-                    selected={selectedMessages.includes(msg._id)}
-                  />
-                ))}
-                <div ref={messagesEndRef} />
-              </div>
+              // If a chat is selected but there are no messages, show placeholder
+              messages.length === 0 ? (
+                <div className="flex-1 flex items-center justify-center text-slate-400">
+                  <div className="text-center">
+                    <p className="text-lg font-medium">No messages yet</p>
+                    <p className="text-sm mt-2 text-slate-400">Start the conversation by sending a message.</p>
+                  </div>
+                </div>
+              ) : (
+                <div className="space-y-3 pb-2">
+                  {messages.map((msg) => (
+                    <MessageBubble
+                      key={msg._id}
+                      message={msg}
+                      own={msg.senderId?.toString() === user._id}
+                      onSelect={handleSelect}
+                      selected={selectedMessages.includes(msg._id)}
+                    />
+                  ))}
+                  <div ref={messagesEndRef} />
+                </div>
+              )
             )}
           </div>
         </div>

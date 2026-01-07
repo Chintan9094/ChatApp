@@ -4,7 +4,7 @@ import UserItem from "./UserItem";
 import { FiLogOut } from "react-icons/fi";
 import { useAuth } from "../context/AuthContext";
 
-export default function Sidebar({ setSelectedUser }) {
+export default function Sidebar({ setSelectedUser, selectedUser }) {
   const { users, getAllUser, loading } = useUser();
   const {user: authUser, logout } = useAuth();
 
@@ -27,7 +27,12 @@ export default function Sidebar({ setSelectedUser }) {
         {users
         .filter(u => u._id !== authUser?._id)
         .map((user) => (
-          <UserItem key={user._id} user={user} onClick={() => setSelectedUser(user)} />
+          <UserItem
+            key={user._id}
+            user={user}
+            onClick={() => setSelectedUser(user)}
+            isActive={selectedUser?._id === user._id}
+          />
         ))}
       </div>
 

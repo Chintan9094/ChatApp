@@ -43,3 +43,57 @@ export const sendMessage = async (req, res, next) => {
         next(error);
     }
 };
+
+export const deleteMessage = async (req, res, next) => {
+        console.log("route hit delete single msges---------->")
+    try {
+
+        console.log("routes comes here at the try phase in single message delete");
+
+        
+        const message = await Message.findById(req.params.messageId);
+
+         console.log("message i d----> ",message);
+        if (!message) {
+            return next(new AppError("Message not found", 404));
+        }
+        if (message.senderId.toString() !== req.user._id.toString()) {
+            return next(new AppError("You are not authorized to delete this message", 403));
+        }
+        await message.remove();
+        res.json({
+            success: true,
+            message: "Message deleted successfully"
+        });
+    } catch (error) {
+        next(error);
+    }   
+};
+
+export const deleteMessages = async (req, res, next) => {
+    console.log("route hit delete muiltiple msges---------->")
+  try {
+      console.log("routes comes here at the try phase in muiltiple message delete")
+    const { messageIds } = req.body;
+
+    console.log("message i d----> ",messageIds);
+    
+
+    if (!messageIds || !messageIds.length) {
+      return next(new AppError("Message IDs required", 400));
+    }
+
+    await Message.deleteMany({
+      _id: { $in: messageIds },
+      senderId: req.user._id,
+    });
+
+   return res.json({
+      success: true,
+      deletedIds: messageIds,
+    });
+  } catch (error) {
+    next(error);
+  }
+};
+

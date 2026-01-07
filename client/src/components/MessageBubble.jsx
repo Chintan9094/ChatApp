@@ -1,27 +1,34 @@
-export default function MessageBubble({ own, message }) {
+import React from "react";
 
+export default function MessageBubble({
+  own,
+  message,
+  onSelect,
+  selected,
+}) {
   const time = new Date(message.createdAt).toLocaleTimeString("en-IN", {
     hour: "2-digit",
     minute: "2-digit",
-    hour12: true
+    hour12: true,
   });
 
   return (
-    <div className={`flex ${own ? "justify-end" : "justify-start"} px-1`}>
+    <div
+      onClick={() => {
+        if (!own) return;
+        onSelect && onSelect(message._id, message.senderId);
+      }}
+      className={`relative flex ${own ? "justify-end" : "justify-start"} px-1`}
+    >
       <div
-        className={`max-w-[80%] md:max-w-sm px-4 py-3 rounded-2xl text-sm shadow-lg transition ${
-          own
-            ? "bg-linear-to-br from-indigo-600 to-blue-500 text-white border border-indigo-400/40"
-            : "bg-white/10 text-slate-100 border border-white/10"
-        }`}
+        className={`
+          max-w-[80%] md:max-w-sm px-4 py-3 rounded-2xl text-sm shadow-lg
+          ${own ? "bg-indigo-600 text-white cursor-pointer" : "bg-white/10"}
+          ${selected ? "ring-2 ring-red-400" : ""}
+        `}
       >
-        <div>{message.text}</div>
-
-        <div
-          className={`text-[11px] mt-2 text-right ${
-            own ? "text-indigo-100/80" : "text-slate-300"
-          }`}
-        >
+        {message.text}
+        <div className="text-[11px] mt-2 text-right opacity-70">
           {time}
         </div>
       </div>

@@ -13,39 +13,67 @@ export default function Chat() {
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
+  const [selectedMessages, setSelectedMessages] = useState([]);
   const messagesEndRef = useRef(null);
-  const socketRef = useRef(null);
+
   const { user } = useAuth();
   const socket = useSocket();
 
+  // Fetch messages
   useEffect(() => {
     if (!selectedUser) return;
+
     api.get(`/message/messages/${selectedUser._id}`).then((res) => {
       setMessages(res.data.message);
+      setSelectedMessages([]);
     });
   }, [selectedUser]);
 
-useEffect(() => {
-  if (!socket?.current) return;
+  // Receive socket message
+  useEffect(() => {
+    if (!socket?.current) return;
 
-  socket.current.on("receive-msg", (data) => {
-    if (data.senderId === selectedUser?._id) {
-      setMessages((prev) => [...prev, data.message]);
-    }
-  });
-
-  return () => {
-    socket.current.off("receive-msg");
-  };
-}, [selectedUser, socket]);
-
-useEffect(() => {
-  if (messagesEndRef.current) {
-    messagesEndRef.current.scrollIntoView({
-      behavior: "smooth",
+    socket.current.on("receive-msg", (data) => {
+      if (data.senderId === selectedUser?._id) {
+        setMessages((prev) => [...prev, data.message]);
+      }
     });
-  }
-}, [messages]);
+
+    return () => socket.current.off("receive-msg");
+  }, [selectedUser, socket]);
+
+  // Auto scroll
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  }, [messages]);
+
+  // Select message (ONLY OWN)
+  const handleSelect = (id, senderId) => {
+    if (senderId?.toString() !== user._id) return;
+
+    setSelectedMessages((prev) =>
+      prev.includes(id)
+        ? prev.filter((m) => m !== id)
+        : [...prev, id]
+    );
+  };
+
+  // Delete selected messages
+  const deleteSelectedMessages = async () => {
+    try {
+      await api.post("/message/delete-many", {
+        messageIds: selectedMessages,
+      });
+
+      setMessages((prev) =>
+        prev.filter((m) => !selectedMessages.includes(m._id))
+      );
+
+      setSelectedMessages([]);
+    } catch (err) {
+      console.error("Delete failed", err);
+    }
+  };
 
   return (
     <div className="h-screen flex bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 overflow-hidden">
@@ -59,17 +87,23 @@ useEffect(() => {
           />
         )}
 
+        {selectedUser && selectedMessages.length > 0 && (
+          <div className="px-4 py-2 bg-red-500/10 border-b border-red-500/20 flex justify-end">
+            <button
+              onClick={deleteSelectedMessages}
+              className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-1.5 rounded"
+            >
+              Delete Selected ({selectedMessages.length})
+            </button>
+          </div>
+        )}
+
         <div className="flex-1 overflow-y-auto custom-scrollbar bg-white/5 backdrop-blur border-x border-white/10">
           <div className="p-4 md:p-6 min-h-full flex flex-col">
             {!selectedUser ? (
-              <div className="h-full flex flex-col items-center justify-center text-slate-300 flex-1">
-                <div className="p-4 rounded-full bg-white/10 border border-white/10 shadow-lg">
-                  <FiMessageSquare size={60} className="text-indigo-300" />
-                </div>
-                <p className="mt-5 text-lg font-medium text-slate-200">
-                  Select a chat to start messaging
-                </p>
-                <p className="text-sm text-slate-400">Your conversations will appear here.</p>
+              <div className="flex-1 flex flex-col items-center justify-center text-slate-300">
+                <FiMessageSquare size={60} className="text-indigo-300" />
+                <p className="mt-4 text-lg">Select a chat to start messaging</p>
               </div>
             ) : (
               <div className="space-y-3 pb-2">
@@ -78,6 +112,8 @@ useEffect(() => {
                     key={msg._id}
                     message={msg}
                     own={msg.senderId?.toString() === user._id}
+                    onSelect={handleSelect}
+                    selected={selectedMessages.includes(msg._id)}
                   />
                 ))}
                 <div ref={messagesEndRef} />

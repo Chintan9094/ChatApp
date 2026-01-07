@@ -58,7 +58,6 @@ export default function Chat() {
     );
   };
 
-  // Delete selected messages
   const deleteSelectedMessages = async () => {
     try {
       await api.post("/message/delete-many", {
@@ -93,7 +92,7 @@ export default function Chat() {
               onClick={deleteSelectedMessages}
               className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-1.5 rounded"
             >
-              Delete Selected ({selectedMessages.length})
+              UnSend Selected ({selectedMessages.length})
             </button>
           </div>
         )}
@@ -106,7 +105,6 @@ export default function Chat() {
                 <p className="mt-4 text-lg">Select a chat to start messaging</p>
               </div>
             ) : (
-              // If a chat is selected but there are no messages, show placeholder
               messages.length === 0 ? (
                 <div className="flex-1 flex items-center justify-center text-slate-400">
                   <div className="text-center">

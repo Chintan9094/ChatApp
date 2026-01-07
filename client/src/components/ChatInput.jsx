@@ -52,7 +52,6 @@ export default function ChatInput({ selectedUser, setMessages }) {
     const newText = text.slice(0, start) + emoji + text.slice(end);
     setText(newText);
 
-    // move caret after inserted emoji
     setTimeout(() => {
       input.focus();
       const pos = start + emoji.length;
@@ -63,7 +62,7 @@ export default function ChatInput({ selectedUser, setMessages }) {
   };
 
   return (
-    <div className="sticky bottom-0 z-10 p-4 md:p-5 border-t border-white/10 glass flex items-center gap-3 backdrop-blur-xl shadow-lg relative">
+    <div className="relative bottom-0 z-10 p-4 md:p-5 border-t border-white/10 glass flex items-center gap-3 backdrop-blur-xl shadow-lg">
       <div className="relative flex items-center">
         <button
           type="button"

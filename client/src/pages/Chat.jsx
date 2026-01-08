@@ -74,15 +74,34 @@ export default function Chat() {
     }
   };
 
-  return (
-    <div className="h-screen flex bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 overflow-hidden">
-      <Sidebar setSelectedUser={setSelectedUser} selectedUser={selectedUser} />
+  const handleSelectUser = (userItem) => {
+    setSelectedUser(userItem);
+  };
 
-      <div className="flex-1 flex flex-col h-full max-w-6xl mx-auto w-full overflow-hidden">
+  return (
+    <div className="h-screen flex flex-col md:flex-row bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 overflow-hidden">
+      <div
+        className={`h-full w-full md:w-72 md:flex-shrink-0 ${
+          selectedUser ? "hidden md:block" : "block"
+        }`}
+      >
+        <Sidebar
+          setSelectedUser={handleSelectUser}
+          selectedUser={selectedUser}
+        />
+      </div>
+
+      <div
+        className={`flex-1 h-full w-full md:max-w-6xl md:mx-auto overflow-hidden transform transition-transform duration-300 ease-out ${
+          selectedUser ? "flex" : "hidden md:flex"
+        }`}
+      >
+        <div className="flex-1 flex flex-col h-full overflow-hidden">
         {selectedUser && (
           <ChatHeader
             selectedUser={selectedUser}
             onClick={() => setIsProfileOpen(true)}
+            onBack={() => setSelectedUser(null)}
           />
         )}
 
@@ -133,6 +152,7 @@ export default function Chat() {
         {selectedUser && (
           <ChatInput selectedUser={selectedUser} setMessages={setMessages} />
         )}
+        </div>
       </div>
 
       <ProfileSidebar

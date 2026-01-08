@@ -11,7 +11,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5174",
-      "http://192.168.1.105:5174",
+      "https://chatapp-go.vercel.app",
     ],
     credentials: true,
   })

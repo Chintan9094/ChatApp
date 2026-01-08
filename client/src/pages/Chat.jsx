@@ -94,7 +94,7 @@ export default function Chat() {
       >
         <div className="flex flex-col h-full w-full overflow-hidden">
           {selectedUser && (
-            <div className="shrink-0">
+            <div className="shrink-0 position-fixed top-0 w-full">
               <ChatHeader
                 selectedUser={selectedUser}
                 onClick={() => setIsProfileOpen(true)}
@@ -148,7 +148,7 @@ export default function Chat() {
           </div>
 
           {selectedUser && (
-            <div className="shrink-0">
+            <div className="shrink-0 w-full position-fixed bottom-0">
               <ChatInput selectedUser={selectedUser} setMessages={setMessages} />
             </div>
           )}

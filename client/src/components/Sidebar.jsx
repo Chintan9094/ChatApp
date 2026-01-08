@@ -15,7 +15,7 @@ export default function Sidebar({ setSelectedUser, selectedUser }) {
   if (loading) return <p className="text-center text-slate-200 py-4">Loading Users...</p>;
 
   return (
-    <div className="w-full lg:w-80 border-r border-white/10 glass flex flex-col h-screen shadow-2xl overflow-hidden">
+    <div className="w-full lg:w-80 border-r border-white/10 glass flex flex-col h-full shadow-2xl overflow-hidden">
       <div className="p-5 border-b border-white/10 shrink-0">
         <div className="flex items-center justify-between">
           <div className="text-lg font-bold text-gradient">Chats</div>
@@ -23,7 +23,7 @@ export default function Sidebar({ setSelectedUser, selectedUser }) {
         <p className="text-xs text-slate-300 mt-1">Tap a user to open the thread</p>
       </div>
 
-      <div className="overflow-y-auto flex-1 custom-scrollbar min-h-0">
+      <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar">
         {users
         .filter(u => u._id !== authUser?._id)
         .map((user) => (

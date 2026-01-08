@@ -19,7 +19,6 @@ export default function Chat() {
   const { user } = useAuth();
   const socket = useSocket();
 
-  // Fetch messages
   useEffect(() => {
     if (!selectedUser) return;
 
@@ -29,7 +28,6 @@ export default function Chat() {
     });
   }, [selectedUser]);
 
-  // Receive socket message
   useEffect(() => {
     if (!socket?.current) return;
 
@@ -42,12 +40,10 @@ export default function Chat() {
     return () => socket.current.off("receive-msg");
   }, [selectedUser, socket]);
 
-  // Auto scroll
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages]);
 
-  // Select message (ONLY OWN)
   const handleSelect = (id, senderId) => {
     if (senderId?.toString() !== user._id) return;
 
@@ -79,9 +75,9 @@ export default function Chat() {
   };
 
   return (
-    <div className="h-screen flex flex-col md:flex-row bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 overflow-hidden">
+    <div className="h-dvh md:h-screen flex flex-col md:flex-row bg-linear-to-br from-slate-950 via-slate-900 to-slate-950 text-slate-100 overflow-hidden">
       <div
-        className={`h-full w-full md:w-72 md:flex-shrink-0 ${
+        className={`h-full w-full md:w-72 md:shrink-0 ${
           selectedUser ? "hidden md:block" : "block"
         }`}
       >
@@ -96,62 +92,66 @@ export default function Chat() {
           selectedUser ? "flex" : "hidden md:flex"
         }`}
       >
-        <div className="flex-1 flex flex-col h-full overflow-hidden">
-        {selectedUser && (
-          <ChatHeader
-            selectedUser={selectedUser}
-            onClick={() => setIsProfileOpen(true)}
-            onBack={() => setSelectedUser(null)}
-          />
-        )}
+        <div className="flex flex-col h-full w-full overflow-hidden">
+          {selectedUser && (
+            <div className="shrink-0">
+              <ChatHeader
+                selectedUser={selectedUser}
+                onClick={() => setIsProfileOpen(true)}
+                onBack={() => setSelectedUser(null)}
+              />
+            </div>
+          )}
 
-        {selectedUser && selectedMessages.length > 0 && (
-          <div className="px-4 py-2 bg-red-500/10 border-b border-red-500/20 flex justify-end">
-            <button
-              onClick={deleteSelectedMessages}
-              className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-1.5 rounded"
-            >
-              UnSend Selected ({selectedMessages.length})
-            </button>
-          </div>
-        )}
+          {selectedUser && selectedMessages.length > 0 && (
+            <div className="shrink-0 px-4 py-2 bg-red-500/10 border-b border-red-500/20 flex justify-end">
+              <button
+                onClick={deleteSelectedMessages}
+                className="bg-red-600 hover:bg-red-700 text-white text-sm px-4 py-1.5 rounded"
+              >
+                UnSend Selected ({selectedMessages.length})
+              </button>
+            </div>
+          )}
 
-        <div className="flex-1 overflow-y-auto custom-scrollbar bg-white/5 backdrop-blur border-x border-white/10">
-          <div className="p-4 md:p-6 min-h-full flex flex-col">
-            {!selectedUser ? (
-              <div className="flex-1 flex flex-col items-center justify-center text-slate-300">
-                <FiMessageSquare size={60} className="text-indigo-300" />
-                <p className="mt-4 text-lg">Select a chat to start messaging</p>
-              </div>
-            ) : (
-              messages.length === 0 ? (
-                <div className="flex-1 flex items-center justify-center text-slate-400">
-                  <div className="text-center">
-                    <p className="text-lg font-medium">No messages yet</p>
-                    <p className="text-sm mt-2 text-slate-400">Start the conversation by sending a message.</p>
-                  </div>
+          <div className="flex-1 min-h-0 overflow-y-auto custom-scrollbar bg-white/5 backdrop-blur border-x border-white/10">
+            <div className="p-4 md:p-6 min-h-full flex flex-col">
+              {!selectedUser ? (
+                <div className="flex-1 flex flex-col items-center justify-center text-slate-300">
+                  <FiMessageSquare size={60} className="text-indigo-300" />
+                  <p className="mt-4 text-lg">Select a chat to start messaging</p>
                 </div>
               ) : (
-                <div className="space-y-3 pb-2">
-                  {messages.map((msg) => (
-                    <MessageBubble
-                      key={msg._id}
-                      message={msg}
-                      own={msg.senderId?.toString() === user._id}
-                      onSelect={handleSelect}
-                      selected={selectedMessages.includes(msg._id)}
-                    />
-                  ))}
-                  <div ref={messagesEndRef} />
-                </div>
-              )
-            )}
+                messages.length === 0 ? (
+                  <div className="flex-1 flex items-center justify-center text-slate-400">
+                    <div className="text-center">
+                      <p className="text-lg font-medium">No messages yet</p>
+                      <p className="text-sm mt-2 text-slate-400">Start the conversation by sending a message.</p>
+                    </div>
+                  </div>
+                ) : (
+                  <div className="space-y-3 pb-2">
+                    {messages.map((msg) => (
+                      <MessageBubble
+                        key={msg._id}
+                        message={msg}
+                        own={msg.senderId?.toString() === user._id}
+                        onSelect={handleSelect}
+                        selected={selectedMessages.includes(msg._id)}
+                      />
+                    ))}
+                    <div ref={messagesEndRef} />
+                  </div>
+                )
+              )}
+            </div>
           </div>
-        </div>
 
-        {selectedUser && (
-          <ChatInput selectedUser={selectedUser} setMessages={setMessages} />
-        )}
+          {selectedUser && (
+            <div className="shrink-0">
+              <ChatInput selectedUser={selectedUser} setMessages={setMessages} />
+            </div>
+          )}
         </div>
       </div>
 

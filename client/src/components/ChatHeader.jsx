@@ -5,7 +5,7 @@ export default function ChatHeader({ onClick, selectedUser, onBack }) {
   return (
     <div
       onClick={onClick}
-      className="sticky top-0 z-10 p-4 md:p-5 border-b border-white/10 glass flex items-center gap-3 cursor-pointer hover:bg-white/10 transition shadow-lg backdrop-blur-xl"
+      className="w-full p-4 md:p-5 border-b border-white/10 glass flex items-center gap-3 cursor-pointer hover:bg-white/10 transition shadow-lg backdrop-blur-xl"
     >
       <button
         type="button"

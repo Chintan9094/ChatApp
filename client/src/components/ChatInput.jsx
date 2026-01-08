@@ -62,7 +62,7 @@ export default function ChatInput({ selectedUser, setMessages }) {
   };
 
   return (
-    <div className="relative bottom-0 z-10 p-4 md:p-5 border-t border-white/10 glass flex items-center gap-3 backdrop-blur-xl shadow-lg">
+    <div className="w-full p-4 md:p-5 border-t border-white/10 glass flex items-center gap-3 backdrop-blur-xl shadow-lg">
       <div className="relative flex items-center">
         <button
           type="button"

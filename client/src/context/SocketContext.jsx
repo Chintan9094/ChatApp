@@ -1,7 +1,7 @@
 import { createContext, useContext, useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { useAuth } from "./AuthContext";
-
+const SOCKET_URL = import.meta.env.VITE_API_BASE_URL;
 const SocketContext = createContext(null);
 
 export const SocketProvider = ({ children }) => {
@@ -12,7 +12,7 @@ export const SocketProvider = ({ children }) => {
     if (!user) return;
 
     if (!socketRef.current) {
-      socketRef.current = io("http://localhost:5000", {
+      socketRef.current = io(SOCKET_URL, {
         transports: ["websocket"],
         withCredentials: true,
       });

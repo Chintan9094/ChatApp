@@ -6,7 +6,7 @@ A modern, full-stack chat application enabling real-time messaging with a clean,
 
 ## Live Demo
 
-[Live Demo](https://your-deployed-app-url.com) *(Coming Soon)*
+[Live Demo](https://chatapp-go.vercel.app/)
 
 ---
 
